@@ -1,4 +1,4 @@
-class HandClock extends HTMLElement {
+export default class HandClock extends HTMLElement {
   constructor() {
     super();
 
@@ -111,6 +111,3 @@ class HandClock extends HTMLElement {
     renderClockHands(this);
   }
 }
-
-// Register DOM element
-customElements.define('hand-clock', HandClock);
