@@ -1,5 +1,5 @@
 {
-  "name": "npm-components",
+  "name": "npm-html-elements",
   "version": "1.0.0",
   "description": "npm package that imports custom html components",
   "main": "index.js",
