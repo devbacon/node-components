@@ -1,29 +1,29 @@
 export default class HandClock extends HTMLElement {
-  constructor() {
-    super();
+	constructor() {
+		super();
 
-    // Create shadow DOM and clock elements
-    const shadow = this.attachShadow({mode: 'open'});
-    const clockFace = document.createElement('div');
-    const hourHand = document.createElement('div');
-    const minuteHand = document.createElement('div');
-    const secondHand = document.createElement('div');
-    const style = document.createElement('style');
-    const size = this.getAttribute('size');
+		// Create shadow DOM and clock elements
+		const shadow = this.attachShadow({ mode: 'open' });
+		const clockFace = document.createElement('div');
+		const hourHand = document.createElement('div');
+		const minuteHand = document.createElement('div');
+		const secondHand = document.createElement('div');
+		const style = document.createElement('style');
+		const size = this.getAttribute('size');
 
-    clockFace.setAttribute('class', 'clock-face');
-    hourHand.setAttribute('class', 'hour hand');
-    minuteHand.setAttribute('class', 'minute hand');
-    secondHand.setAttribute('class', 'second hand');
+		clockFace.setAttribute('class', 'clock-face');
+		hourHand.setAttribute('class', 'hour hand');
+		minuteHand.setAttribute('class', 'minute hand');
+		secondHand.setAttribute('class', 'second hand');
 
-    /*
+		/*
       Display clock face using flex to easily center hands.
       Stack hands using absolute and rotate them all to an upright position.
       Use ::after element selector on each hand to create their visual components.
       This allows the base element to be the center of rotation.
       Specify a height and width for all hands based on size attribute.
     */
-    style.textContent = `
+		style.textContent = `
       * {
         box-sizing: border-box;
       }
@@ -67,47 +67,47 @@ export default class HandClock extends HTMLElement {
         margin-top: -1px;
         width: ${size / 2.4}px;
       }
-    `
-    
-    // Fill shadow DOM
-    shadow.appendChild(style);
-    shadow.appendChild(clockFace);
-    clockFace.appendChild(hourHand);
-    clockFace.appendChild(minuteHand);
-    clockFace.appendChild(secondHand);
+    `;
 
-    // Use Date object to find current time
-    const renderClockHands = () => {
-      const time = new Date();
-      let hours = null;
-      let minutes = null;
-      let seconds = null;
+		// Fill shadow DOM
+		shadow.appendChild(style);
+		shadow.appendChild(clockFace);
+		clockFace.appendChild(hourHand);
+		clockFace.appendChild(minuteHand);
+		clockFace.appendChild(secondHand);
 
-      // If UTC is set then adjust time appropriately
-      if (this.hasAttribute('utc')) {
-        const utc = this.getAttribute('utc');
-        hours = time.getUTCHours() + parseInt(utc);
-        minutes = time.getUTCMinutes();
-        seconds = time.getUTCSeconds();
-      } else {
-        hours = time.getHours(); 
-        minutes = time.getMinutes();
-        seconds = time.getSeconds();
-      }
+		// Use Date object to find current time
+		const renderClockHands = () => {
+			const time = new Date();
+			let hours = null;
+			let minutes = null;
+			let seconds = null;
 
-      // Calculate rotations based on time
-      const hourRotation = (hours / 12) * 360 + (minutes / 60) * 30 - 90;
-      const minuteRotation = (minutes / 60) * 360 + (seconds / 60) * 6 - 90;
-      const secondRotation = (seconds / 60) * 360 - 90;
+			// If UTC is set then adjust time appropriately
+			if (this.hasAttribute('utc')) {
+				const utc = this.getAttribute('utc');
+				hours = time.getUTCHours() + parseInt(utc);
+				minutes = time.getUTCMinutes();
+				seconds = time.getUTCSeconds();
+			} else {
+				hours = time.getHours();
+				minutes = time.getMinutes();
+				seconds = time.getSeconds();
+			}
 
-      // Set rotation of DOM elements
-      hourHand.style.transform = `rotate(${hourRotation}deg)`;
-      minuteHand.style.transform = `rotate(${minuteRotation}deg)`;
-      secondHand.style.transform = `rotate(${secondRotation}deg)`;
-    }
+			// Calculate rotations based on time
+			const hourRotation = hours / 12 * 360 + minutes / 60 * 30 - 90;
+			const minuteRotation = minutes / 60 * 360 + seconds / 60 * 6 - 90;
+			const secondRotation = seconds / 60 * 360 - 90;
 
-    // Update time every second
-    setInterval(renderClockHands, 1000);
-    renderClockHands(this);
-  }
+			// Set rotation of DOM elements
+			hourHand.style.transform = `rotate(${hourRotation}deg)`;
+			minuteHand.style.transform = `rotate(${minuteRotation}deg)`;
+			secondHand.style.transform = `rotate(${secondRotation}deg)`;
+		};
+
+		// Update time every second
+		setInterval(renderClockHands, 1000);
+		renderClockHands(this);
+	}
 }
